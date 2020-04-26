@@ -7,27 +7,22 @@ namespace UdpGateway
 {
     public class UdpListener
     {
-        private readonly int _port;
-        private readonly IPAddress _address;
-
         private readonly UdpClient _listener;
         private IPEndPoint _endpoint;
         private readonly UdpMessageHandler _handler;
 
         private readonly ILogger _logger = UdpGatewayLoggerFactory.CreateLogger();
 
-        public UdpListener(IPAddress address, int port, UdpMessageHandler handler)
+        public UdpListener(UdpClient listener, IPEndPoint endpoint, UdpMessageHandler handler)
         {
-            _port = port;
-            _address = address;
-            _listener = new UdpClient(_port);
-            _endpoint = new IPEndPoint(_address, _port);
+            _listener = listener;
+            _endpoint = endpoint;
             _handler = handler;
         }
 
         public void Listen()
         {
-            _logger.LogInformation($"Listening on port {_port} from address {_address}");
+            _logger.LogInformation("Listening");
             try
             {
                 while (true)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Net.Sockets;
 using Microsoft.Extensions.Logging;
 
 namespace UdpGateway
@@ -21,9 +22,15 @@ namespace UdpGateway
 
                 var port = int.Parse(portString);
                 var ipAddress = IPAddress.Any;
+
+                var udpClient = new UdpClient(port);
+                var endpoint = new IPEndPoint(ipAddress, port);
+
+                logger.LogInformation($"Init via port={port} and ipAddress={ipAddress}");
+
                 var handler = new EchoMessageHandler();
 
-                var listener = new UdpListener(ipAddress, port, handler);
+                var listener = new UdpListener(udpClient, endpoint, handler);
 
                 listener.Listen();
             }
